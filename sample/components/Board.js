@@ -28,16 +28,7 @@ export default function Board() {
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        width: "180px", // Add a fixed width to the board
-        height: "180px", // Add a fixed height to the board
-        gridTemplateRows: "60px 60px 60px", // Specify size in pixels
-        gridTemplateColumns: "60px 60px 60px", // Specify size in pixels
-        gap: "0",
-      }}
-    >
+    <div className="grid grid-cols-3 grid-rows-3 w-48 h-48 gap-0">
       {board.map((value, i) => (
         <Square key={i} value={value} onClick={() => makeMove(i)} />
       ))}
