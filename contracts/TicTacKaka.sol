@@ -19,6 +19,7 @@ contract TicTacKaka {
         for(uint8 i = 0; i < 9; i++) {
             board[i] = "";
         }
+        gameFinished = false;
     }
 
     function makeMove(uint8 position, string calldata player) external {
@@ -96,5 +97,20 @@ contract TicTacKaka {
 
     function getBoard() external view returns (string[9] memory) {
         return board;
+    }
+
+    function getGameStatus() external view returns (string memory) {
+        if (gameFinished) {
+            if (checkDraw()) {
+                return "It's a draw!";
+            } else if (checkWinner(human)) {
+                return "Goku wins!";
+            } else if (checkWinner(ai)) {
+                return "Dragon Ball wins!";
+            }
+        } else {
+            return keccak256(bytes(currentPlayer)) == keccak256(bytes(human)) ? "It's Goku's turn." : "It's Dragon Ball's turn.";
+        }
+        return "Unknown game status.";
     }
 }
