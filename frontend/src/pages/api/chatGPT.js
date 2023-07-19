@@ -8,7 +8,26 @@ export default async function handler(req, res) {
   });
   const openai = new OpenAIApi(configuration);
 
-  const system_prompt = "You are a helpful, rule-following game strategiest.";
+  const system_prompt = `You are a helpful, rule-following game strategiest, playing tic-tac-toe. 
+  Tic-tac-toe is a strategy game where two players, Goku and Dragon-Ball, take turns marking spots 
+  in a 3x3 grid. The goal is to be the first to get three of their own marks in  a row, either 
+  horizontally, vertically, or diagonally.
+
+  A player cannot mark a spot that's already occupied.
+  
+  Smart moves involve:
+  
+  Completing a row of three of your own marks (Goku or Dragon-Ball).
+  Blocking the opponent from completing their row of three.
+  Creating a 'fork' - a position with two potential winning rows.
+  Blocking an opponent's fork.
+  Occupying the center or a corner if available, as these positions give more winning opportunities.
+  Remember, the best move may depend on the current state of the grid and the opponent's strategy.
+  
+  You will receive a board state and must return the best next available move for Goku. The board state 
+  will look like this: [${board}]. The slots are numbered from 0 to 8, left to right, top to bottom. 
+  
+  DO NOT PICK A SLOT THAT IS OCCUPIED BY DRAGON-BALL OR GOKU.`;
 
   const func_desc = [
     {
@@ -32,7 +51,7 @@ export default async function handler(req, res) {
 
   try {
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo-0613", // gpt-3.5-turbo-0613 gpt-4-0613
+      model: "gpt-4-0613", // gpt-3.5-turbo-0613 gpt-4-0613
       messages: [
         { role: "system", content: system_prompt },
         { role: "user", content: generatePrompt(board) },
@@ -64,7 +83,7 @@ export default async function handler(req, res) {
 
 function generatePrompt(board) {
   const stringifiedBoard = board.toString();
-  return `Here is the current state of tic-tac-toe board: [${board}].
+  return `Here is the current state of tic-tac-toe board: [${board}]. You are dragon-ball. The other player is goku.
 
-    What is the best next available move for O? Do not choose a square that already has an X. For instance, if the state of the board is [,,,,X,,,,], do not choose space 4`;
+    What is the best next available move for dragon-ball? Do not choose a square that is already occupied by goku. For instance, if the state of the board is [,,,,goku,,,,], do not choose space 4`;
 }
