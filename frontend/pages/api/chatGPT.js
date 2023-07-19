@@ -29,10 +29,10 @@ export default async function handler(req, res) {
   ];
 
   console.log(generatePrompt(board));
-  // gpt-3.5-turbo-0613 gpt-4-0613
+
   try {
     const completion = await openai.createChatCompletion({
-      model: "gpt-4-0613",
+      model: "gpt-3.5-turbo-0613", // gpt-3.5-turbo-0613 gpt-4-0613
       messages: [
         { role: "system", content: system_prompt },
         { role: "user", content: generatePrompt(board) },
@@ -60,14 +60,6 @@ export default async function handler(req, res) {
       });
     }
   }
-
-  //   //   const board = req.body.board;
-  //   let move = 4; // Center square
-  //   if (board[move] !== null) {
-  //     // If center square is taken, choose the first available square
-  //     move = board.indexOf(null);
-  //   }
-  //   res.status(200).json({ move });
 }
 
 function generatePrompt(board) {
