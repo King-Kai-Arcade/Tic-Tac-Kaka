@@ -91,8 +91,6 @@ export default function Home() {
   }
 
   async function makeMove(num, player) {
-    if (gameFinished) return;
-
     console.log("MAKE MOVE");
 
     let newGameState = [...gameState];
@@ -107,6 +105,9 @@ export default function Home() {
         contractABI,
         signer
       );
+
+      const checkGameFinished = await contract.gameFinished();
+      if (checkGameFinished) return;
 
       setSpacePendingTx(num);
       const tx = await contract.makeMove(num, player);
