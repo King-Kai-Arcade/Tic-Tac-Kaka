@@ -93,10 +93,6 @@ export default function Home() {
   async function makeMove(num, player) {
     console.log("MAKE MOVE");
 
-    let newGameState = [...gameState];
-    newGameState[num] = player;
-    setGameState(newGameState);
-
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
@@ -108,6 +104,10 @@ export default function Home() {
 
       const checkGameFinished = await contract.gameFinished();
       if (checkGameFinished) return;
+
+      let newGameState = [...gameState];
+      newGameState[num] = player;
+      setGameState(newGameState);
 
       setSpacePendingTx(num);
       const tx = await contract.makeMove(num, player);
