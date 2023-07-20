@@ -11,23 +11,37 @@ export default function Home() {
   const [currentPlayer, setCurrentPlayer] = useState("goku")
   const [actionCounter, setActionCounter] = useState(0);
   const [status, setStatus] = useState("")
+  const [gameFinished, setGameFinished] = useState(false)
 
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 
   async function refreshBoard() {
+    console.log("REFRESH BOARD")
     if (!window.ethereum) {
+      console.log("not connected to ethereum")
       setStatus('Please connect to MetaMask.')
       return
     }
     try {
       const provider = new ethers.BrowserProvider(window.ethereum)
-      const contract = new ethers.Contract(contractAddress, contractAbi, provider)
+      const contract = new ethers.Contract(contractAddress, contractABI, provider)
 
       const boardState = await contract.getBoard()
+      console.log("board state on contract: ", boardState)
       setGameState(boardState)
+      const gameFinished = await contract.gameFinished()
+      if (gameFinished == true) {
+        setGameFinished(true)
+      }
+      setActionCounter(prev => prev + 1);
     } catch (err) {
       setStatus(`Error: ${err.message}`)
     }
+
+  }
+
+  function lockBoard() {
+
   }
 
   async function getCurrentPlayer() {
@@ -53,12 +67,8 @@ export default function Home() {
 
       await tx.wait()
 
-      const newGameState = [...gameState];
-      newGameState[num] = isGokuNext ? "goku" : "dragon-ball";
-      setGameState(newGameState);
       setIsGokuNext(!isGokuNext);
-      setActionCounter(prev => prev + 1);
-      // refreshBoard()
+      refreshBoard()
     } catch (err) {
       console.log("error: ", err)
       setStatus(`Error: ${err.message}`)
@@ -96,9 +106,6 @@ export default function Home() {
         if (move !== -1) {
           if (gameState[move]) return;
           makeMove(move, "dragon-ball")
-          const newGameState = [...gameState];
-          newGameState[move] = isGokuNext ? "goku" : "dragon-ball";
-          setGameState(newGameState);
           setIsGokuNext(!isGokuNext);
         }
       });
@@ -127,7 +134,7 @@ export default function Home() {
         <div className="grid grid-cols-3 grid-rows-3 gap-6 w-96 h-96 mt-10 border-4 border-yellow-500 rounded-lg ki-blast-border">
           {gameState.map((state, i) => (
             <button
-              disabled={currentPlayer === "dragon-ball"}
+              disabled={currentPlayer === "dragon-ball" || gameFinished == true}
               key={i}
               className="w-24 h-24 bg-yellow-100 border-2 border-yellow-300 rounded-md focus:outline-none transition-transform duration-500 ease-in-out transform hover:scale-110 hover:rotate-3"
               onClick={() => handleClick(i)}
