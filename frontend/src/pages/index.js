@@ -91,7 +91,8 @@ export default function Home() {
   }
 
   async function makeMove(num, player) {
-    if (gameFinished) return;
+    const checkGameFinished = await contract.gameFinished();
+    if (checkGameFinished) return;
 
     console.log("MAKE MOVE");
 
