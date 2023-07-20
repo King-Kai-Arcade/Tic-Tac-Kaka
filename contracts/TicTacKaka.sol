@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract TicTacKaka {
     string public human = "goku";
-    string public ai = "dragon-ball";
+    string public ai = "frieza";
     string public currentPlayer;
     bool public gameFinished;
     string[9] public board;
@@ -19,6 +19,7 @@ contract TicTacKaka {
         for(uint8 i = 0; i < 9; i++) {
             board[i] = "";
         }
+        currentPlayer = human;
         gameFinished = false;
     }
 
@@ -101,15 +102,16 @@ contract TicTacKaka {
 
     function getGameStatus() external view returns (string memory) {
         if (gameFinished) {
-            if (checkDraw()) {
-                return "It's a draw!";
-            } else if (checkWinner(human)) {
+            if (checkWinner(human)) {
                 return "Goku wins!";
             } else if (checkWinner(ai)) {
-                return "Dragon Ball wins!";
+                return "Frieza wins!";
+            }
+            else if (checkDraw()) {
+                return "It's a draw!";
             }
         } else {
-            return keccak256(bytes(currentPlayer)) == keccak256(bytes(human)) ? "It's Goku's turn." : "It's Dragon Ball's turn.";
+            return keccak256(bytes(currentPlayer)) == keccak256(bytes(human)) ? "It's Goku's turn (You)." : "It's Frieza's turn (AI).";
         }
         return "Unknown game status.";
     }
