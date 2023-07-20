@@ -20,7 +20,7 @@ function PlayerPiece({ state, pending }) {
       const timeoutId = setTimeout(() => {
         setAnimation("opacity-100");
         setShouldPulse(false); // Reset shouldPulse after the pulse animation completes
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timeoutId);
     } else {
       setAnimation("opacity-100");
@@ -47,7 +47,7 @@ function PlayerPiece({ state, pending }) {
         <img
           src="/hourglass.svg"
           alt="Hourglass"
-          className="absolute left-[32px] top-[23px] h-6 w-6 animate-spin"
+          className="absolute left-[21px] top-[10px] h-12 w-12 animate-spin"
         />
       )}
     </div>
