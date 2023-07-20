@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   const openai = new OpenAIApi(configuration);
 
   const system_prompt = `You are a helpful, rule-following game strategiest, playing tic-tac-toe. 
-  Tic-tac-toe is a strategy game where two players, Goku and Dragon-Ball, take turns marking spots 
+  Tic-tac-toe is a strategy game where two players, Goku and Frieza, take turns marking spots 
   in a 3x3 grid. The goal is to be the first to get three of their own marks in  a row, either 
   horizontally, vertically, or diagonally.
 
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   
   Smart moves involve:
   
-  Completing a row of three of your own marks (Goku or Dragon-Ball).
+  Completing a row of three of your own marks (Goku or Frieza).
   Blocking the opponent from completing their row of three.
   Creating a 'fork' - a position with two potential winning rows.
   Blocking an opponent's fork.
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
   You will receive a board state and must return the best next available move for Goku. The board state 
   will look like this: [${board}]. The slots are numbered from 0 to 8, left to right, top to bottom. 
   
-  DO NOT PICK A SLOT THAT IS OCCUPIED BY DRAGON-BALL OR GOKU.`;
+  DO NOT PICK A SLOT THAT IS OCCUPIED BY FRIEZA OR GOKU.`;
 
   const func_desc = [
     {
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
       ],
       functions: func_desc,
       function_call: { name: "move" },
-      temperature: 0,
+      temperature: 0.2,
       frequency_penalty: 0.2,
       presence_penalty: 0,
     });
@@ -83,7 +83,7 @@ export default async function handler(req, res) {
 
 function generatePrompt(board) {
   const stringifiedBoard = board.toString();
-  return `Here is the current state of tic-tac-toe board: [${board}]. You are dragon-ball. The other player is goku.
+  return `Here is the current state of tic-tac-toe board: [${board}]. You are frieza. The other player is goku.
 
-    What is the best next available move for dragon-ball? Do not choose a square that is already occupied by goku. For instance, if the state of the board is [,,,,goku,,,,], do not choose space 4`;
+    What is the best next available move for frieza? Do not choose a square that is already occupied by goku. For instance, if the state of the board is [,,,,goku,,,,], do not choose space 4`;
 }

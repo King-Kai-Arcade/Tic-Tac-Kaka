@@ -164,6 +164,7 @@ export default function Home() {
         const parsed = JSON.parse(res.data.result.arguments);
         const move = parsed.move;
         console.log(res.data);
+        console.log("move: ", move);
         if (move !== -1) {
           if (gameState[move]) return;
           makeMove(move, "frieza");
@@ -203,7 +204,7 @@ export default function Home() {
           <BoardOverlay show={gameFinished} />
           {gameState.map((state, i) => (
             <button
-              disabled={currentPlayer === "frieza" || gameFinished == true}
+              // disabled={currentPlayer === "frieza" || gameFinished == true}
               key={i}
               className="w-24 h-24 bg-yellow-100 border-2 border-yellow-300 rounded-md focus:outline-none transition-transform duration-500 ease-in-out transform hover:scale-110 hover:rotate-3"
               onClick={() => handleClick(i)}
